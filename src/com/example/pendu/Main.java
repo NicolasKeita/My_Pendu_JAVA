@@ -1,7 +1,8 @@
-package com.example.helloworld;
+package com.example.pendu;
 
-public class HelloWorld {
+public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world");
+        Window window = new Window();
     }
 }
