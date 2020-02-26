@@ -1,5 +1,8 @@
 package com.example.pendu;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.Color;
+
 
 public class Window extends JFrame {
         public Window() {
@@ -7,6 +10,8 @@ public class Window extends JFrame {
                 this.setSize(1100, 700);
                 this.setLocationRelativeTo(null);
                 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                this.setContentPane(new Panel());;
+                this.setBackground(Color.GRAY);
                 this.setVisible(true);
         }
 }
