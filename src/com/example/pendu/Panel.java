@@ -1,5 +1,7 @@
 package com.example.pendu;
 
+import com.sun.deploy.util.StringUtils;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -8,12 +10,68 @@ import java.io.*;
 import java.awt.*;
 import java.io.*;
 
-public class Panel extends JPanel {
+public class Panel extends JPanel implements ActionListener {
 
     public String word = "", secretWord = "";
     public char[] tabChar;
     public int nbreCoup = 0;
     public JButton[] bouton;
+//    public Graphics g;
+    public int wrong_tries = 0;
+
+    public void actionPerformed(ActionEvent e) {
+        ((JButton)e.getSource()).setEnabled(false);
+        char letter = ((JButton)e.getSource()).getText().charAt(0);
+        System.out.println(letter);
+        if (this._verifyWord(letter) == 1) {
+            System.out.println("MOT TROUVE !");
+        }
+        else {
+            this.wrong_tries += 1;
+            if (this.wrong_tries == 5) {
+                System.out.println("You lost !");
+                System.exit(0);
+            }
+            this.repaint();
+            //this.paintComponent(this.g, 2);
+            System.out.println("CHERCHE ENCORE  !");
+        }
+    }
+
+    public static boolean isEmpty(String s) {
+        return s == null || s.length() == 0;
+    }
+
+    public static int countMatches(String text, String str) {
+        if (isEmpty(text) || isEmpty(str)) {
+            return 0;
+        }
+
+        int index = 0, count = 0;
+        while (true) {
+            index = text.indexOf(str, index);
+            if (index != -1) {
+                count ++;
+                index += str.length();
+            } else {
+                break;
+            }
+        }
+
+        return count;
+    }
+
+    public int _verifyWord(char c)
+    {
+        int occurenceNumber = countMatches(secretWord, "*");
+        if (occurenceNumber > 1)
+            return 0;
+        int index = secretWord.indexOf(c);
+        if (index == -1)
+            return 0;
+        else
+            return 1;
+    }
 
     public Panel() {
 
@@ -36,7 +94,7 @@ public class Panel extends JPanel {
         int i = 0;
         for(char c : carac) {
             this.bouton[i] = new JButton(String.valueOf(c).toUpperCase());
-            //bouton[i].addActionListener(bl);
+            bouton[i].addActionListener(this);
             bouton[i].setPreferredSize(buttonDimension);
             body.add(bouton[i]);
             i++;
@@ -44,12 +102,15 @@ public class Panel extends JPanel {
         this.add(body);
 //        this.add(body, FlowLayout.CENTER);
     }
+
+
     public void paintComponent(Graphics g) {
+//        this.g = g;
         Font font = new Font("Courier", Font.PLAIN, 24);
         g.setFont(font);
         g.setColor(Color.white);
-        g.drawString("Le Jeu du Pendu", 450, 100);
-        this._printImage(1, g);
+        g.drawString("Le Jeu du Pendu", 450, 300);
+        this._printImage(this.wrong_tries + 1, g);
         this._printSecretWord(g);
     }
 
@@ -72,7 +133,7 @@ public class Panel extends JPanel {
         this._generateRandomWord();
         System.out.println(this.secretWord);
         System.out.println(this.word);
-        g.drawString(this.secretWord, 450, 200);
+        g.drawString(this.secretWord, 450, 400);
     }
 
     public void _generateRandomWord()
@@ -115,14 +176,4 @@ public class Panel extends JPanel {
 
 
 }
-
-/*
-class BoutonListener implements ActionListener {
-    public void actionPerformed(ActionEvent e){
-        ((JButton)e.getSource()).setEnabled(false);
-        controler.control(((JButton)e.getSource()).getText().charAt(0));
-    }
-}*/
-
-
 

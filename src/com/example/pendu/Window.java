@@ -11,7 +11,7 @@ public class Window extends JFrame {
                 this.setLocationRelativeTo(null);
                 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 this.setContentPane(new Panel());
-//                this.setBackground(Color.gray);
+                this.setBackground(Color.gray);
                 this.setVisible(true);
         }
 }
