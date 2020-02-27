@@ -16,14 +16,8 @@ public class Panel extends JPanel {
     public JButton[] bouton;
 
     public Panel() {
-    }
-    public void paintComponent(Graphics g) {
-        Font font = new Font("Courier", Font.PLAIN, 24);
-        g.setFont(font);
-        g.setColor(Color.white);
-        g.drawString("Le Jeu du Pendu", 450, 100);
-        this._printImage(1, g);
-        this._printSecretWord(g);
+
+        this.setLayout(new FlowLayout());
 
         char[] carac = {'a', 'b','c', 'd', 'e', 'f',
                 'g', 'h', 'i', 'j', 'k', 'l',
@@ -37,16 +31,28 @@ public class Panel extends JPanel {
         body.setPreferredSize(dim);
         body.setBackground(Color.white);
 
+        body.setLayout(new GridLayout(5, 2));
         this.bouton = new JButton[26];
         int i = 0;
-        for(char c : carac){
+        for(char c : carac) {
             this.bouton[i] = new JButton(String.valueOf(c).toUpperCase());
             //bouton[i].addActionListener(bl);
             bouton[i].setPreferredSize(buttonDimension);
             body.add(bouton[i]);
             i++;
         }
+        this.add(body);
+//        this.add(body, FlowLayout.CENTER);
     }
+    public void paintComponent(Graphics g) {
+        Font font = new Font("Courier", Font.PLAIN, 24);
+        g.setFont(font);
+        g.setColor(Color.white);
+        g.drawString("Le Jeu du Pendu", 450, 100);
+        this._printImage(1, g);
+        this._printSecretWord(g);
+    }
+
     public void _printImage(int id, Graphics g)
     {
         String path = "assets/" + Integer.toString(id) + ".jpg";
