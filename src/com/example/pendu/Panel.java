@@ -26,16 +26,32 @@ public class Panel extends JPanel implements ActionListener {
         if (this._verifyWord(letter) == 1) {
             System.out.println("MOT TROUVE !");
         }
+        else if (this._isInsideWord(letter) == 1) {
+            int index = this.word.indexOf(letter);
+            char d = this.secretWord.charAt(index);
+            StringBuilder new_secretWord = new StringBuilder(this.secretWord);
+            new_secretWord.setCharAt(index, letter);
+            this.secretWord = new_secretWord.toString();
+
+            this.repaint();
+        }
         else {
             this.wrong_tries += 1;
-            if (this.wrong_tries == 5) {
+            if (this.wrong_tries == 8) {
                 System.out.println("You lost !");
                 System.exit(0);
             }
             this.repaint();
-            //this.paintComponent(this.g, 2);
             System.out.println("CHERCHE ENCORE  !");
         }
+    }
+
+    public int _isInsideWord(char c) {
+        int index = this.word.indexOf(c);
+        if (index == -1)
+            return 0;
+        else
+            return 1;
     }
 
     public static boolean isEmpty(String s) {
@@ -66,8 +82,8 @@ public class Panel extends JPanel implements ActionListener {
         int occurenceNumber = countMatches(secretWord, "*");
         if (occurenceNumber > 1)
             return 0;
-        int index = secretWord.indexOf(c);
-        if (index == -1)
+        int index = secretWord.indexOf('*');
+        if (word.charAt(index)!= c)
             return 0;
         else
             return 1;
@@ -75,6 +91,7 @@ public class Panel extends JPanel implements ActionListener {
 
     public Panel() {
 
+        this._generateRandomWord();
         this.setLayout(new FlowLayout());
 
         char[] carac = {'a', 'b','c', 'd', 'e', 'f',
@@ -103,12 +120,13 @@ public class Panel extends JPanel implements ActionListener {
 //        this.add(body, FlowLayout.CENTER);
     }
 
-
     public void paintComponent(Graphics g) {
 //        this.g = g;
         Font font = new Font("Courier", Font.PLAIN, 24);
         g.setFont(font);
         g.setColor(Color.white);
+        g.fillRect(450,300,1920, 1080);
+//        g.clearRect(450, 300, 200, 100);
         g.drawString("Le Jeu du Pendu", 450, 300);
         this._printImage(this.wrong_tries + 1, g);
         this._printSecretWord(g);
@@ -130,7 +148,7 @@ public class Panel extends JPanel implements ActionListener {
         Font font = new Font("Courier", Font.PLAIN, 32);
         g.setFont(font);
         g.setColor(Color.BLUE);
-        this._generateRandomWord();
+        //this._generateRandomWord();
         System.out.println(this.secretWord);
         System.out.println(this.word);
         g.drawString(this.secretWord, 450, 400);
